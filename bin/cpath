@@ -129,11 +129,13 @@ if [ "$windows_flag" ] ; then
   if [ "$escape_flag" ] ; then
     win_path="$(printf "%s" "$win_path" | sed 's/\\/\\\\/g' )"
   fi
+  printf "%s" "$win_path"
 fi
 
 if [ "$unix_flag" ] ; then
   win_path="$file_path"
   unix_path="$(to_unix_path "$win_path")"
+  printf "%s" "$unix_path"
 fi
 
 if [ "$directory_flag" ] ; then
