@@ -123,9 +123,8 @@ fi
 win_path=""
 unix_path=""
 
-if [ "$windows_flag" ] ; then
+if [ "$windows_flag" = true ] ; then
   unix_path="$file_path"
-  #printf "%s" "$unix_path"
 
   if [[ "$unix_path" == /* ]] ; then
     # strip leading slash and convert to backslash
@@ -137,18 +136,18 @@ if [ "$windows_flag" ] ; then
     win_path="$(printf "%s" "$unix_path" | sed 's/\//\\/g')"
   fi
 
-  if [ "$escape_flag" ] ; then
+  if [ "$escape_flag" = true ] ; then
     win_path="$(printf "%s" "$win_path" | sed 's/\\/\\\\/g' )"
   fi
   printf "%s" "$win_path"
 fi
 
-if [ "$unix_flag" ] ; then
+if [ "$unix_flag" = true ] ; then
   win_path="$file_path"
   unix_path="$(to_unix_path "$win_path")"
   printf "%s" "$unix_path"
 fi
 
-if [ "$directory_flag" ] ; then
+if [ "$directory_flag" = true ] ; then
   mkdir -p "$unix_path"
 fi
