@@ -87,7 +87,7 @@ to_win_path() {
     # handle absolute
     if [[ "$1" == /* ]] ; then
       # strip leading slash and convert to backslash
-      wpath="$(printf "%s" "$1" | sed -e 's/^\///' -e 's/\//\\/g')"
+      wpath="$(printf "%b" "$1" | sed -e 's/^\///' -e 's/\//\\/g')"
       # Add semicolon after drive
       printf "%s" "${wpath:0:1}" #"${wpath:1}"
     else
