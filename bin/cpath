@@ -15,12 +15,16 @@ YELLOW='\033[1;33m'
 windows_flag=false
 unix_flag=false
 escape_flag=false
+lower_flag=false
+upper_flag=false
 directory_flag=false
 
 usage_short="${BLUE}usage: cpath [-w] [-u] [-p] [path]"
 usage_long="$usage_short\n-w: convert unix path to windows"
 usage_long="$usage_long\n-u: convert windows path to unix"
 usage_long="$usage_long\n-e: add escape characters for converted path"
+usage_long="$usage_long\n-l: convert to lowercase"
+usage_long="$usage_long\n-U: convert to uppercase"
 usage_long="$usage_long\n-p: create directory recursively at path${NC}"
 
 usage_short="$usage_short\nuse -h to get supported command information${NC}"
@@ -30,7 +34,7 @@ if [ "$#" == "0" ] ; then
   exit 1
 fi
 
-options=":wueph"
+options=":wuelUph"
 shopt -u nocasematch
 OPTIND=1
 while getopts "$options" opt ; do
@@ -43,6 +47,12 @@ while getopts "$options" opt ; do
       ;;
     e )
       escape_flag=true
+      ;;
+    l )
+      lower_flag=true
+      ;;
+    U )
+      upper_flag=true
       ;;
     p )
       directory_flag=true
@@ -76,52 +86,30 @@ if [ -z "$file_path" ] ; then
   file_path="$PWD"
 fi
 
-
-
 generate_name() {
   < /dev/urandom tr -dc a-z | head -c${1:-32};echo;
 }
-
-to_win_path() {
-  if [ "$1" ] ; then
-    # handle absolute
-    if [[ "$1" == /* ]] ; then
-      # strip leading slash and convert to backslash
-      wpath="$(printf "%s" "$1" | sed -e 's/^\///' -e 's/\//\\/g')"
-      # Add semicolon after drive
-      wpath="$(printf "%s:%s" "${wpath:0:1}" "${wpath:1}")"
-      printf "%s" "$wpath"
-    else
-      # convert to backslash
-      wpath="$(printf "%s" "$1" | sed 's/\//\\/g')"
-      printf "%s" "$wpath"
-    fi
-  fi
-}
-
-to_unix_path() {
-  if [ "$1" ] ; then
-    # handle absolute
-    if [[ "$1" == [A-Za-z]:* ]] ; then
-      # add leading slash and strip colons and convert backslash to forward slash
-      upath="$(printf "%s" "$1" | tr -d ":" | sed 's/\\\\/\//g' | sed 's/^/^\//')"
-      printf "%s" "$upath"
-    else
-      # convert to forward slash
-      upath="$(printf "%s" "$1" |  sed 's/\\\\/\//g' )"
-      printf "%s" "$upath"
-    fi
-  fi
-}
-
 
 if [ "$windows_flag" = "$unix_flag" ] ; then
   >&2 printf "%b- must set -w or -u but not both -%b" "$RED" "$NC"
   exit 1
 fi
 
+if [ "$lower_flag" -a "$upper_flag" ] ; then
+  >&2 printf "%b- cannot set both -l and -U flags -%b" "$RED" "$NC"
+  exit 1
+fi
+
 win_path=""
 unix_path=""
+
+if [ "$lower_flag" = true ] ; then
+  file_path="$(printf "%s" "$file_path" | tr '[:upper:]' '[:lower:]' )"
+fi
+
+if [ "$upper_flag" = true ] ; then
+  file_path="$(printf "%s" "$file_path" | tr '[:lower:]' '[:upper:]' )"
+fi
 
 if [ "$windows_flag" = true ] ; then
   unix_path="$file_path"
@@ -139,12 +127,22 @@ if [ "$windows_flag" = true ] ; then
   if [ "$escape_flag" = true ] ; then
     win_path="$(printf "%s" "$win_path" | sed 's/\\/\\\\/g' )"
   fi
+
   printf "%s" "$win_path"
 fi
 
 if [ "$unix_flag" = true ] ; then
   win_path="$file_path"
-  unix_path="$(to_unix_path "$win_path")"
+  # handle absolute
+    if [[ "$win_path" == [A-Za-z]:* ]] ; then
+      # add leading slash and strip colons and convert backslash to forward slash
+      upath="$(printf "%s" "$win_path" | tr -d ":" | sed -e 's/\\\\/\//g' -e 's/^/\//')"
+      printf "%s" "$upath"
+    else
+      # convert to forward slash
+      upath="$(printf "%s" "$1" |  sed 's/\\\\/\//g' )"
+      printf "%s" "$upath"
+    fi
   printf "%s" "$unix_path"
 fi
 
