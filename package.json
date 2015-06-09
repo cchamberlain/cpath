@@ -5,7 +5,8 @@
   "main": "index.js",
   "preferGlobal": true,
   "directories": {
-    "bin": "bin"
+    "bin": "bin",
+    "test": "test"
   },
   "repository": {
     "type": "git",
@@ -23,5 +24,8 @@
     "url": "https://github.com/cchamberlain/cpath/issues"
   },
   "homepage": "https://github.com/cchamberlain/cpath#readme",
-  "scripts": {}
+  "scripts": {},
+  "devDependencies": {
+    "tape": "^4.0.0"
+  }
 }

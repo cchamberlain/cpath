@@ -87,13 +87,13 @@ to_win_path() {
     # handle absolute
     if [[ "$1" == /* ]] ; then
       # strip leading slash and convert to backslash
-      wpath="$(printf "%s" "$1" | sed "s/^\///" | tr "/" "\\")"
+      wpath="$(printf "%s" "$1" | sed -e 's/^\///' -e 's/\//\\\\/g')"
       # Add semicolon after drive
       wpath="$(printf "%s:%s" "${wpath:0:1}" "${wpath:1}")"
       printf "%s" "$wpath"
     else
       # convert to backslash
-      wpath="$(printf "%s" "$1" | tr "/" "\\")"
+      wpath="$(printf "%s" "$1" | sed 's/\//\\\\/g')"
       printf "%s" "$wpath"
     fi
   fi
@@ -104,11 +104,11 @@ to_unix_path() {
     # handle absolute
     if [[ "$1" == [A-Za-z]:* ]] ; then
       # add leading slash and strip colons and convert backslash to forward slash
-      upath="$(printf "%s" "$1" | tr -d ":" | tr "\\" "/"  | sed "s/^/^\//")"
+      upath="$(printf "%s" "$1" | tr -d ":" | sed 's/\\\\/\//g' | sed 's/^/^\//')"
       printf "%s" "$upath"
     else
       # convert to forward slash
-      upath="$(printf "%s" "$1" | tr "\\" "/")"
+      upath="$(printf "%s" "$1" |  sed 's/\\\\/\//g' )"
       printf "%s" "$upath"
     fi
   fi
@@ -127,7 +127,7 @@ if [ "$windows_flag" ] ; then
   unix_path="$file_path"
   win_path="$(to_win_path "$unix_path")"
   if [ "$escape_flag" ] ; then
-    win_path="$(printf "%s" "$win_path" | tr "\\" "\\\\")"
+    win_path="$(printf "%s" "$win_path" | sed 's/\\/\\\\/g' )"
   fi
 fi
 
