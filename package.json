@@ -1,6 +1,6 @@
 {
   "name": "cpath",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Convert between windows and unix paths at command line.",
   "main": "index.js",
   "preferGlobal": true,
@@ -19,5 +19,6 @@
   "bugs": {
     "url": "https://github.com/cchamberlain/cpath/issues"
   },
-  "homepage": "https://github.com/cchamberlain/cpath#readme"
+  "homepage": "https://github.com/cchamberlain/cpath#readme",
+  "scripts": {}
 }
