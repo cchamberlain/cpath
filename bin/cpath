@@ -133,16 +133,16 @@ fi
 
 if [ "$unix_flag" = true ] ; then
   win_path="$file_path"
+
   # handle absolute
-    if [[ "$win_path" == [A-Za-z]:* ]] ; then
-      # add leading slash and strip colons and convert backslash to forward slash
-      upath="$(printf "%s" "$win_path" | tr -d ":" | sed -e 's/\\\\/\//g' -e 's/^/\//')"
-      printf "%s" "$upath"
-    else
-      # convert to forward slash
-      upath="$(printf "%s" "$1" |  sed 's/\\\\/\//g' )"
-      printf "%s" "$upath"
-    fi
+  if [[ "$win_path" == [A-Za-z]:* ]] ; then
+    # add leading slash and strip colons and convert backslash to forward slash
+    unix_path="$(printf "%s" "$win_path" | tr -d ":" | sed -e 's/\\/\//g' -e 's/^/\//')"
+  else
+    # convert to forward slash
+    unix_path="$(printf "%s" "$1" |  sed 's/\\/\//g' )"
+  fi
+
   printf "%s" "$unix_path"
 fi
 
