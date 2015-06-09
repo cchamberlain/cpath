@@ -4,6 +4,9 @@
   "description": "Convert between windows and unix paths at command line.",
   "main": "index.js",
   "preferGlobal": true,
+  "directories": {
+      "bin": "bin"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cchamberlain/cpath.git"
