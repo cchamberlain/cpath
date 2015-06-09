@@ -19,7 +19,7 @@ lower_flag=false
 upper_flag=false
 directory_flag=false
 
-usage_short="${BLUE}usage: cpath [-w] [-u] [-p] [path]"
+usage_short="${BLUE}usage: cpath [-w] [-u] [-l] [-U] [-p] [path]"
 usage_long="$usage_short\n-w: convert unix path to windows"
 usage_long="$usage_long\n-u: convert windows path to unix"
 usage_long="$usage_long\n-e: add escape characters for converted path"
