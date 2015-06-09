@@ -95,7 +95,7 @@ if [ "$windows_flag" = "$unix_flag" ] ; then
   exit 1
 fi
 
-if [ "$lower_flag" -a "$upper_flag" ] ; then
+if [ "$lower_flag" = true -a "$upper_flag" = true ] ; then
   >&2 printf "%b- cannot set both -l and -U flags -%b" "$RED" "$NC"
   exit 1
 fi
