@@ -1,0 +1,23 @@
+{
+  "name": "cpath",
+  "version": "0.1.0",
+  "description": "Convert between windows and unix paths at command line.",
+  "main": "index.js",
+  "preferGlobal": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cchamberlain/cpath.git"
+  },
+  "keywords": [
+    "path",
+    "convert",
+    "windows",
+    "unix"
+  ],
+  "author": "Cole Chamberlain",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cchamberlain/cpath/issues"
+  },
+  "homepage": "https://github.com/cchamberlain/cpath#readme"
+}
