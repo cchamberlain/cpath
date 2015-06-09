@@ -1,6 +1,6 @@
 {
   "name": "cpath",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "Convert between windows and unix paths at command line.",
   "main": "index.js",
   "preferGlobal": true,
